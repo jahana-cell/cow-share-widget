@@ -16,8 +16,14 @@
         .progress-bar-fill {
             transition: width 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
-        .btn {
-            transition: background-color 0.3s ease;
+        /* Animation for the cow's eyes */
+        @keyframes gentle-blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        .cow-eye {
+            transform-origin: center;
+            animation: gentle-blink 4s ease-in-out infinite;
         }
     </style>
 </head>
@@ -27,13 +33,29 @@
         
         <!-- Left Column: Cow Image -->
         <div class="flex justify-center">
-            <svg class="w-full max-w-xs h-auto" viewBox="0 0 150 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M133.5 60.1C133.5 82.2 119.3 99.6 102.5 107.1C97 109.6 91.2 111.1 85.2 111.6C75.2 112.4 65 110.1 56.5 105.6C41.5 97.6 30.5 83.1 28.5 66.1C28.1 62.1 28.3 58.1 29.1 54.1C21.1 53.1 14.4 48.9 10.1 42.4C2.5 31.4 6.3 16.4 17.3 8.9C28.3 1.4 43.3 -2.4 54.3 5.1C58.3 7.9 61.2 11.9 62.8 16.6C63.2 17.8 63.5 19.1 63.7 20.6C68.2 19.1 72.8 18.6 77.5 19.1C87.5 20.1 96.7 24.4 103.5 31.6C112.5 41.1 115.3 54.1 110.5 66.1C112.5 64.1 114.8 62.6 117.3 61.6C125.3 58.6 133.5 58.1 133.5 60.1Z" fill="#A98C78"/>
-                <circle cx="75" cy="30" r="6" fill="#FFFFFF"/>
-                <ellipse cx="95" cy="45" rx="10" ry="7" fill="#FFFFFF"/>
-                <ellipse cx="60" cy="55" rx="12" ry="8" fill="#FFFFFF"/>
-                <circle cx="40" cy="25" r="3" fill="#4A423B"/>
-                <path d="M38 32 C 40 35, 45 35, 47 32" stroke="#4A423B" stroke-width="1.5" fill="none"/>
+            <!-- Animated Cartoon Cow SVG -->
+            <svg class="w-full max-w-xs h-auto" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <!-- Ears -->
+                    <path d="M45 55 C 15 45, 15 85, 45 75" fill="#A98C78"/>
+                    <path d="M155 55 C 185 45, 185 85, 155 75" fill="#A98C78"/>
+                    <!-- Head -->
+                    <path d="M50 45 C 10 55, 10 115, 50 125 C 90 135, 150 135, 150 125 C 190 115, 190 55, 150 45 C 110 35, 90 35, 50 45 Z" fill="#A98C78"/>
+                    <!-- Snout -->
+                    <ellipse cx="100" cy="110" rx="45" ry="30" fill="#D4B49E"/>
+                    <!-- Nostrils -->
+                    <ellipse cx="80" cy="110" rx="6" ry="9" fill="#4A423B"/>
+                    <ellipse cx="120" cy="110" rx="6" ry="9" fill="#4A423B"/>
+                    <!-- Eyes -->
+                    <circle class="cow-eye" cx="70" cy="80" r="12" fill="#4A423B"/>
+                    <circle class="cow-eye" cx="130" cy="80" r="12" fill="#4A423B"/>
+                    <!-- White reflection in eyes -->
+                    <circle cx="73" cy="77" r="3" fill="white"/>
+                    <circle cx="133" cy="77" r="3" fill="white"/>
+                    <!-- Spots -->
+                    <path d="M140 70 C 160 60, 170 90, 150 90 C 130 90, 130 75, 140 70 Z" fill="#FFFFFF"/>
+                    <path d="M40 85 C 20 80, 30 110, 50 105 Z" fill="#FFFFFF"/>
+                </g>
             </svg>
         </div>
 
@@ -49,7 +71,7 @@
             <div class="mb-6">
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Purchase Progress</h2>
                 <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                    <div id="progress-bar" class="progress-bar-fill bg-[#A98C78] h-full rounded-full" style="width: 0%;"></div>
+                    <div id="progress-bar" class="progress-bar-fill bg-green-500 h-full rounded-full" style="width: 0%;"></div>
                 </div>
                 <div class="flex justify-between mt-2 text-sm text-gray-600">
                     <div><span class="font-bold" id="shares-sold">--</span> Shares Sold</div>
@@ -57,17 +79,9 @@
                 </div>
             </div>
 
-            <!-- Purchase Section -->
-            <div class="bg-gray-50 p-4 rounded-lg border">
-                <h3 class="font-bold text-center text-gray-700 mb-3">Buy Your Shares</h3>
-                <div class="flex items-center justify-center space-x-4 mb-4">
-                    <button id="minus-btn" class="btn bg-gray-200 hover:bg-gray-300 rounded-full w-8 h-8 font-bold text-lg text-gray-700">-</button>
-                    <input id="shares-input" type="number" value="1" min="1" class="w-16 text-center font-bold text-lg border-2 border-gray-300 rounded-lg p-1">
-                    <button id="plus-btn" class="btn bg-gray-200 hover:bg-gray-300 rounded-full w-8 h-8 font-bold text-lg text-gray-700">+</button>
-                </div>
-                <button id="buy-button" class="btn w-full bg-[#A98C78] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#937764]">
-                    Buy 1 Share
-                </button>
+            <!-- Purchase Information -->
+            <div class="mt-4 bg-gray-50 p-4 rounded-lg border text-center">
+                <p class="text-gray-600">To purchase shares, please visit our main store. Our progress is updated here daily!</p>
             </div>
         </div>
     </div>
@@ -75,84 +89,43 @@
     <script>
         // --- CONFIGURATION ---
         const DATA_URL = 'https://raw.githubusercontent.com/jahana-cell/cow-share-widget/main/data.json';
-        const PAYMENT_URL = 'https://your-squarespace-payment-link-goes-here.com'; // Replace with your actual payment link
 
         // --- DOM ELEMENTS ---
-        const progressBar = document.getElementById('progress-bar');
         const sharesSoldEl = document.getElementById('shares-sold');
         const sharesRemainingEl = document.getElementById('shares-remaining');
-        const sharesInput = document.getElementById('shares-input');
-        const buyButton = document.getElementById('buy-button');
-        const minusBtn = document.getElementById('minus-btn');
-        const plusBtn = document.getElementById('plus-btn');
-
-        let currentSharesSold = 0;
-        let totalShares = 50;
+        const progressBar = document.getElementById('progress-bar');
 
         // --- FUNCTIONS ---
-        function updateUI() {
-            const percentage = totalShares > 0 ? (currentSharesSold / totalShares) * 100 : 0;
-            const sharesRemaining = totalShares - currentSharesSold;
-
-            sharesSoldEl.textContent = currentSharesSold;
-            sharesRemainingEl.textContent = sharesRemaining;
-            progressBar.style.width = `${percentage}%`;
-        }
-
-        function updateBuyButton() {
-            const numShares = parseInt(sharesInput.value) || 1;
-            buyButton.textContent = `Buy ${numShares} Share${numShares > 1 ? 's' : ''}`;
-        }
-
         async function fetchDataAndUpdate() {
             try {
                 const response = await fetch(DATA_URL + '?cachebust=' + new Date().getTime());
                 if (!response.ok) throw new Error('Network response was not ok.');
                 
                 const data = await response.json();
-                currentSharesSold = data.sharesSold || 0;
-                totalShares = data.totalShares || 50;
+                const sharesSold = data.sharesSold || 0;
+                const totalShares = data.totalShares || 20;
+                const sharesRemaining = totalShares - sharesSold;
+                const percentage = totalShares > 0 ? (sharesSold / totalShares) * 100 : 0;
                 
-                updateUI();
+                // Update the UI
+                sharesSoldEl.textContent = sharesSold;
+                sharesRemainingEl.textContent = sharesRemaining;
+                progressBar.style.width = `${percentage}%`;
+
             } catch (error) {
                 console.warn(error.message);
-                console.warn("Using fallback data for demonstration. Please update DATA_URL.");
-                
-                // --- FALLBACK DATA FOR DEMO ---
-                currentSharesSold = 15; // Sample value
-                totalShares = 50;       // Sample value
-                updateUI();
+                console.warn("Could not fetch live data. Displaying placeholder data.");
+                // In case of error, you can leave the placeholders or show default values
+                sharesSoldEl.textContent = '0';
+                sharesRemainingEl.textContent = '20';
+                progressBar.style.width = '0%';
             }
         }
-
-        // --- EVENT LISTENERS ---
-        minusBtn.addEventListener('click', () => {
-            let currentValue = parseInt(sharesInput.value) || 1;
-            if (currentValue > 1) {
-                sharesInput.value = currentValue - 1;
-                updateBuyButton();
-            }
-        });
-
-        plusBtn.addEventListener('click', () => {
-            let currentValue = parseInt(sharesInput.value) || 1;
-            sharesInput.value = currentValue + 1;
-            updateBuyButton();
-        });
-
-        sharesInput.addEventListener('input', updateBuyButton);
-
-        buyButton.addEventListener('click', () => {
-            // In a real app, you might append the number of shares to the URL, e.g., `${PAYMENT_URL}?shares=${sharesInput.value}`
-            window.location.href = PAYMENT_URL;
-        });
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             fetchDataAndUpdate();
-            updateBuyButton();
         });
     </script>
 </body>
 </html>
-
